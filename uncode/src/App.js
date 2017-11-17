@@ -6,13 +6,23 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <nav className="Header">
+          <div className="MaxWidth">
+            <h1>UNCODE</h1>
+          </div>
+        </nav>
+        <div>
+          <div className="MaxWidth">
+            <div className="Form">
+              <input
+                ref={el => this.inputText = el}
+                type="text"
+                className="Text"/>
+              <div className="Separator"></div>
+              <input className="Text" placeholder="OUTPUT GOES HERE"/>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
