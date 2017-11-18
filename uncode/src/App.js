@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { LogoAnim } from './logo/logo-anim';
+
 import SocketIoClient from 'socket.io-client';
 
 class App extends Component {
@@ -30,7 +32,7 @@ class App extends Component {
       <div className="App">
         <nav className="Header">
           <div className="MaxWidth">
-            <h1>UNCODE</h1>
+            <LogoAnim />
           </div>
         </nav>
         <div>
