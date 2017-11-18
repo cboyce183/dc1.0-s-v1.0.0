@@ -1,7 +1,10 @@
 const esprima = require('esprima')
-const map = require('./map');
+const translations = require('../translations/config');
+const OptionsMap = require('./map.js');
 
-module.exports = (codeInput) => {
+module.exports = (codeInput, languaje = 1) => {
+  translations.setDictionary(language);
+  const map = new OptionsMap(translations.dictionary).map
   try {
     const parsedCode = esprima.parseScript(codeInput).body;
     if (parsedCode.length) return parsedCode.map(el => map.get(el.type)(el)).join('\n');
