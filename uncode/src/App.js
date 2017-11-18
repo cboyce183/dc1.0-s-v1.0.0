@@ -16,12 +16,10 @@ class App extends Component {
       outputText: '',
       inputText: ''
     }
-    this.lines = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
   }
 
   componentDidMount() {
     this.socket.on('receive', (data) => {
-      console.log(data)
       if (data) this.setState({outputText: data});
       else this.setState({outputText: 'come on! Keep typing! :)'});
     })
@@ -34,11 +32,15 @@ class App extends Component {
   //=============================================== REDERING
 
   renderLineNumbers () {
-    return (<textarea readOnly className="LineNumbers">{this.lines.map(el => (('0'+el).slice(-2))+'|').join('\n')}</textarea>)
+    const linesArr = new Array(50).fill(undefined);
+    return (
+      <div className="LineNumbers">
+        {linesArr.map((el, i) => (('0'+(i+1)).slice(-2))).join('\n')}
+      </div>
+    );
   }
 
   render() {
-    const lineNumbers = this.renderLineNumbers();
     return (
       <div className="App">
         <nav className="Header">
@@ -52,13 +54,13 @@ class App extends Component {
               <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
             <div className="Form">
-              <Text 
+              <Text
                 func={this.handleTextChange.bind(this)}
                 placeholder="INSERT CODE HERE"
               />
               <div className="Separator"></div>
               <div className="Editor">
-                {lineNumbers}
+                {this.renderLineNumbers()}
                 <textarea
                   className="Text"
                   value={this.state.outputText}

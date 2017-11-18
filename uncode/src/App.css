@@ -102,6 +102,10 @@ textarea {
   width: 25px;
   cursor: default;
   height: 100%;
+  background-color: white;
+  font-family: Courier New, Courier, monospace;
+  font-size: 12px;
+  border-right: 1px solid grey;
 }
 
 .LineNumbers:focus {
