@@ -19,8 +19,12 @@ map.set('VariableDeclaration', (object) => {
                        : ' variable';
   return `${object.declarations.length} ${object.kind}${variableText} ${joinedText}`
 })
-map.set('VariableDeclarator', (object) =>
-  `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`);
+map.set('VariableDeclarator', (object) => {
+  if (object.init) {
+    return `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`;
+  }
+  return `${map.get(object.id.type)(object.id)} declared but not initialized`;
+});
 
 map.set('ConditionalExpression', (object) =>
   `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
