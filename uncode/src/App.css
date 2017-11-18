@@ -57,10 +57,13 @@ body {
   width: 100%;
   height: 100%;
   border: none;
-  text-align: top;
   margin: auto;
   resize: none;
   overflow: hidden;
+  font-family: Courier New, Courier, monospace;
+  font-size: 12px;
+  background-color: white;
+  text-align: left;
 }
 
 .Text:focus {
@@ -90,11 +93,6 @@ body {
 textarea {
   font-family: Courier New, Courier, monospace;
   font-size: 12px;
-}
-
-.Quill {
-  background-color: white;
-  margin-top: 13px;
 }
 
 .LineNumbers {
