@@ -2,7 +2,7 @@ const esprima = require('esprima')
 const translations = require('../translations/config');
 const OptionsMap = require('./map.js');
 
-module.exports = (codeInput, languaje = 1) => {
+module.exports = (codeInput, language = 1) => {
   translations.setDictionary(language);
   const map = new OptionsMap(translations.dictionary).map
   try {
