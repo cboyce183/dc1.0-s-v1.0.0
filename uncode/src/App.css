@@ -15,7 +15,7 @@ body {
   border-color: black;
   color: black;
   background-color: rgba(240, 219, 79, 1);
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.0);
+  /*box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.0);*/
 }
 .about-button {
   width: 70px;
@@ -23,12 +23,12 @@ body {
   border-radius: 2px;
   border-color: #aaa;
   border-style: solid;
-  border-width: 1px;
+  border-width: 0px;
   background-color: rgba(64, 89, 147, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  /*box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);*/
   color: #fff;
 }
 .about-button-text {
@@ -41,12 +41,12 @@ body {
   font-family: 'Roboto';
   margin: 0;
   padding: 0;
-  padding-top: 80px;
+  padding-top: 90px;
   font-weight: 100;
   color: white;
   text-align: center;
   font-size: 18.9px;
-  margin-bottom: 25px;
+  margin-bottom: 35px;
 }
 
 .Header {
