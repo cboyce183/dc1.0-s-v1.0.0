@@ -49,13 +49,13 @@ class OptionsMap {
     )
 
     this.map.set('ForInStatement', (object) => {
-      return `for each element in ${this.map.get(object.right.type)(object.right)}, executes:
+      return `${this.dictionary.for_in_statement_1} ${this.map.get(object.right.type)(object.right)}, ${this.dictionary.executes}:
         ${this.map.get(object.body.type)(object.body)}`;
       }
     )
 
     this.map.set('ForOfStatement', (object) => {
-      return `for each element in ${this.map.get(object.right.type)(object.right)}, executes:
+      return `${this.dictionary.for_in_statement_1} ${this.map.get(object.right.type)(object.right)}, ${this.dictionary.executes}:
         ${this.map.get(object.body.type)(object.body)}`;
       }
     )
@@ -66,11 +66,11 @@ class OptionsMap {
     })
 
     this.map.set('DoWhileStatement', (object) => {
-      return `while ${this.map.get(object.test.type)(object.test)} evaluates to true, executes
+      return `${this.dictionary.while_statement_1} ${this.map.get(object.test.type)(object.test)} evaluates to true, executes
       ${this.map.get(object.body.type)(object.body)}`;
     });
     this.map.set('NewExpression', (object) => {
-      return `a new instantiation of the class ${this.map.get(object.callee.type)(object.callee)}`;
+      return `${this.dictionary.new_expression} ${this.map.get(object.callee.type)(object.callee)}`;
     });
     this.map.set('ConditionalExpression', (object) =>
       `${this.dictionary.conditional_expression_1} ${this.map.get(object.test.type)(object.test)}
@@ -100,9 +100,9 @@ class OptionsMap {
     this.map.set('BlockStatement', (object) =>
       `${object.body.map(line => this.tab + this.map.get(line.type)(line) + '\n').join('')}`);
 
-    this.map.set('BreakStatement', (object) => `breaks (terminates) the outer loop`);
+    this.map.set('BreakStatement', (object) => `${this.dictionary.break_statement_1}`);
 
-    this.map.set('ContinueStatement', (object) => `stops current iteration and moves onto the next`);
+    this.map.set('ContinueStatement', (object) => `${continue_statement}`);
 
     this.map.set('ArrowFunctionExpression', (object) => {
       if (!object.body.body) {
@@ -149,17 +149,17 @@ class OptionsMap {
     );
 
     this.map.set('SwitchStatement', (object) => {
-      return `Switch statement: evaluates the expression (${this.map.get(object.discriminant.type)(object.discriminant)}) and compares the result to the below statements:
+      return `${this.dictionary.switch_statement} (${this.map.get(object.discriminant.type)(object.discriminant)}) and compares the result to the below statements:
         ${object.cases.map(eachCase => this.map.get(eachCase.type)(eachCase)).join('\n')}
       `
     })
 
     this.map.set('SwitchCase', (object) => {
       if (object.test ===null) {
-        return `\tif none of the above cases matches the expression, then the below is executed:
+        return `\t${switch_case_1}:
             ${object.consequent.map(cons => this.map.get(cons.type)(cons)).join('\n')}`;
       }
-      else return `if the expression evaluates to ${this.map.get(object.test.type)(object.test)} then execute:
+      else return `${switch_case_2} ${this.map.get(object.test.type)(object.test)} then execute:
             ${object.consequent.map(hi => this.map.get(hi.type)(hi)).join('\n')}`;
     })
 
