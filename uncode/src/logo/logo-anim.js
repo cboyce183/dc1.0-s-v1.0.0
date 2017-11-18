@@ -13,16 +13,19 @@ export class LogoAnim extends Component {
     setTimeout( () => {
       this.wait = {animation: "boxxy 5s ease-in-out infinite"}
       this.setState({flag:!this.state.flag})
-    },3500);
+    },5000);
   }
   handleAnimationChange = () => {
     this.setState({flag:!this.state.flag})
+    setTimeout(() => {
+      this.setState({flag:!this.state.flag})
+    }, 5000)
   };
 
   handleAnimation = () => {
     if (!this.state.flag) {
       return (
-          <div class="logo-lander" style={{animation: 'contract 3.5s ease'}}>
+          <div className="logo-lander" style={{animation: 'contract 5s ease'}}>
             <p style={{color:'cyan'}}>console</p>
             <p style={{color:'rgb(255, 0, 84)'}}>.</p>
             <p style={{color:'cyan'}}>log</p>
@@ -36,9 +39,9 @@ export class LogoAnim extends Component {
       )
     }
     return (
-        <div class="subcontainer" style={{animation: 'expand 2.0s linear'}}>
-          <p class="logo-uncode">uncode</p>
-          <p class="logo-js">.js</p>
+        <div className="subcontainer" style={{animation: 'expand 2.0s linear'}}>
+          <p className="logo-uncode">uncode</p>
+          <p className="logo-js">.js</p>
         </div>
     )
   }
@@ -46,7 +49,7 @@ export class LogoAnim extends Component {
   render() {
     return (
       <div className="container" onClick={this.handleAnimationChange}>
-        <img class="logo" src={require('../assets/logobox.png')} style={this.wait}/>
+        <img className="logo" src={require('../assets/logobox.png')} style={this.wait}/>
         {this.handleAnimation()}
       </div>
     );
