@@ -97,9 +97,9 @@ map.set('UnaryExpression', (object) => {
   switch(object.operator) {
     case '!':
       return `lo opuesto al valor booleano de ${nextTextValue(argument)}`;
-    case '+':
-      return `negativo ${nextTextValue(argument)}`;
     case '-':
+      return `negativo ${nextTextValue(argument)}`;
+    case '+':
       return nextTextValue(argument);
     case '~':
       return `el bitwise opuesto de ${nextTextValue(argument)}`;
