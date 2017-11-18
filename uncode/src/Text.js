@@ -5,35 +5,26 @@ import './App.css';
 class Text extends Component {
 
   convertKeys ( event ) {
+    const start = this.text.selectionStart;
+    const end = this.text.selectionEnd;
     if (event.key === 'Tab') {
       event.preventDefault();
-      const start = this.text.selectionStart;
-      const end = this.text.selectionEnd;
       this.text.value = this.text.value.slice(0, start) + '  ' + this.text.value.slice(start);
       this.text.selectionStart = start + 2;
       this.text.selectionEnd = end + 2;
-    } else if (event.key === '{') {
+    } else if (event.key === '{' || event.key === '[' || event.key === '(') {
       event.preventDefault();
-      const start = this.text.selectionStart;
-      const end = this.text.selectionEnd;
-      this.text.value = `${this.text.value.slice(0, start)}{
-      }${this.text.value.slice(start)}`;
+      let completedInput = '{}';
+      if (event.key === '[') completedInput = '[]';
+      else if (event.key === '(') completedInput = '()';
+      this.text.value = this.text.value.slice(0, start) + completedInput + this.text.value.slice(start);
+      this.text.selectionStart = start + 1;
+      this.text.selectionEnd = end + 1;
+    } else if (event.keyCode === 13) {
+      event.preventDefault();
+      this.text.value = `${this.text.value.slice(0, start)}\n  \n${this.text.value.slice(end)}`;
       this.text.selectionStart = start + 2;
       this.text.selectionEnd = end + 2;
-    } else if (event.key === '[') {
-      event.preventDefault();
-      const start = this.text.selectionStart;
-      const end = this.text.selectionEnd;
-      this.text.value = this.text.value.slice(0, start) + '[]' + this.text.value.slice(start);
-      this.text.selectionStart = start + 1;
-      this.text.selectionEnd = end + 1;
-    } else if (event.key === '(') {
-      event.preventDefault();
-      const start = this.text.selectionStart;
-      const end = this.text.selectionEnd;
-      this.text.value = this.text.value.slice(0, start) + '()' + this.text.value.slice(start);
-      this.text.selectionStart = start + 1;
-      this.text.selectionEnd = end + 1;
     }
   }
 
