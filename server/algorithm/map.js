@@ -33,6 +33,17 @@ map.set('IfStatement', (object, statement = 'if') => {
   ${map.get(object.consequent.type)(object.consequent)} ${(object.alternate) ? alternate : ''}`;
 })
 
+map.set('ForStatement', (object) => {
+  let init = map.get(object.init.type)(object.init);
+  let condition = map.get(object.test.type)(object.test);
+  let update = map.get(object.update.type)(object.update);
+  let doThing = map.get(object.body.type)(object.body);
+  return init + `; while ` + condition + ` is true,\n\t  ` + doThing + `\t\t` + update;
+  }
+)
+
+
+
 map.set('ConditionalExpression', (object) =>
   `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
    is true: if it is, it returns ${map.get(object.consequent.type)(object.consequent)},
