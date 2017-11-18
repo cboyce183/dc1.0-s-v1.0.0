@@ -22,6 +22,14 @@ map.set('VariableDeclaration', (object) => {
 map.set('VariableDeclarator', (object) =>
   `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`);
 
+map.set('IfStatement', (object, statement = 'if') => {
+  const alternate = object.alternate.type === 'IfStatement'
+        ? map.get(object.alternate.type)(object.alternate, 'else if')
+        : 'else, in the case none of the previous conditions are met:\n' + tab + map.get(object.alternate.type)(object.alternate)
+  return `${statement} ${map.get(object.test.type)(object.test)} resolves to true, executes:
+  ${map.get(object.consequent.type)(object.consequent)}${alternate}`;
+})
+
 map.set('ConditionalExpression', (object) =>
   `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
    is true: if it is, it returns ${map.get(object.consequent.type)(object.consequent)},
@@ -126,35 +134,35 @@ map.set('BinaryExpression', (object) => {
     case '/':
       return `${map.get(object.left.type)(object.left)} divided by ${map.get(object.right.type)(object.right)}`
     case '&':
-      return `the bitwise AND operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`; 
+      return `the bitwise AND operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`;
     case '|':
-      return `the bitwise OR operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`; 
+      return `the bitwise OR operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`;
     case '^':
-      return `the bitwise XOR operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`; 
+      return `the bitwise XOR operation of ${map.get(object.left.type)(object.left)} and ${map.get(object.right.type)(object.right)}`;
     case '<<':
-      return `the binary representation of ${map.get(object.left.type)(object.left)} shifted ${map.get(object.right.type)(object.right)} bits to the left`; 
+      return `the binary representation of ${map.get(object.left.type)(object.left)} shifted ${map.get(object.right.type)(object.right)} bits to the left`;
     case '>>':
-      return `the binary representation of ${map.get(object.left.type)(object.left)} shifted ${map.get(object.right.type)(object.right)} bits to the right`; 
+      return `the binary representation of ${map.get(object.left.type)(object.left)} shifted ${map.get(object.right.type)(object.right)} bits to the right`;
     case '>>>':
-      return `the binary representation of ${map.get(object.left.type)(object.left)} zero-fill-right shifted ${map.get(object.right.type)(object.right)}`; 
+      return `the binary representation of ${map.get(object.left.type)(object.left)} zero-fill-right shifted ${map.get(object.right.type)(object.right)}`;
     case '<':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is less than ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is less than ${map.get(object.right.type)(object.right)})`;
     case '<=':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is less than or equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is less than or equal to ${map.get(object.right.type)(object.right)})`;
     case '>':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is greater than ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is greater than ${map.get(object.right.type)(object.right)})`;
     case '>=':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is greater than or equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is greater than or equal to ${map.get(object.right.type)(object.right)})`;
     case '!=':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is not equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is not equal to ${map.get(object.right.type)(object.right)})`;
     case '!==':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is not deeply equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is not deeply equal to ${map.get(object.right.type)(object.right)})`;
     case '==':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is equal to ${map.get(object.right.type)(object.right)})`;
     case '===':
-      return `the boolean value of ${map.get(object.left.type)(object.left)} is deeply equal to ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of (${map.get(object.left.type)(object.left)} is deeply equal to ${map.get(object.right.type)(object.right)})`;
     case 'instanceof':
-      return `the boolean value of if ${map.get(object.left.type)(object.left)} is constructed from the prototype of ${map.get(object.right.type)(object.right)}`; 
+      return `the boolean value of if (${map.get(object.left.type)(object.left)} is constructed from the prototype of ${map.get(object.right.type)(object.right)})`;
     case '%':
       return `the remainder of ${map.get(object.left.type)(object.left)} divided by ${map.get(object.right.type)(object.right)}`;
   }
