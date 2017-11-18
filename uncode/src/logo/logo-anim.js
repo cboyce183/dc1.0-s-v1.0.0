@@ -49,7 +49,10 @@ export class LogoAnim extends Component {
   render() {
     return (
       <div className="container" onClick={this.handleAnimationChange}>
-        <img className="logo" src={require('../assets/logobox.png')} style={this.wait}/>
+        <div className="container">
+          <img className="logo" src={require('../assets/logobox.png')} style={this.wait}/>
+          <img className="logoback" src={require('../assets/logobox-background.png')} style={this.wait}/>
+        </div>
         {this.handleAnimation()}
       </div>
     );
