@@ -32,8 +32,8 @@ class OptionsMap {
       let alternate = undefined;
       if (object.alternate) {
         alternate = object.alternate.type === 'IfStatement'
-            ? this.map.get(object.alternate.type)(object.alternate, this.dictionary.if_statement_1)
-            : `${this.dictionary.if_statement_2}: ${tab} ${this.map.get(object.alternate.type)(object.alternate)}`;
+            ? this.map.get(object.alternate.type)(object.alternate, '\n' + this.tab + this.dictionary.if_statement_1)
+            : `\n  ${this.dictionary.if_statement_2}:\n  ${this.tab}  ${this.map.get(object.alternate.type)(object.alternate)}`;
       }
       return `${statement} ${this.map.get(object.test.type)(object.test)} ${this.dictionary.if_statement_3}:
       ${this.map.get(object.consequent.type)(object.consequent)} ${(object.alternate) ? alternate : ''}`;
@@ -48,10 +48,30 @@ class OptionsMap {
       }
     )
 
+    this.map.set('ForInStatement', (object) => {
+      return `for each element in ${this.map.get(object.right.type)(object.right)}, executes:
+        ${this.map.get(object.body.type)(object.body)}`;
+      }
+    )
+
+    this.map.set('ForOfStatement', (object) => {
+      return `for each element in ${this.map.get(object.right.type)(object.right)}, executes:
+        ${this.map.get(object.body.type)(object.body)}`;
+      }
+    )
+
     this.map.set('WhileStatement', (object) => {
-      return `${this.dictionary.while_statement_1} ${this.map.get(object.test.type)(object.test)} ${this.dictionary.while_statement_2}, \n${this.map.get(object.body.type)(object.body)} `;
+      return `${this.dictionary.while_statement_1} ${this.map.get(object.test.type)(object.test)} ${this.dictionary.while_statement_2},
+      ${this.map.get(object.body.type)(object.body)} `;
     })
 
+    this.map.set('DoWhileStatement', (object) => {
+      return `while ${this.map.get(object.test.type)(object.test)} evaluates to true, executes
+      ${this.map.get(object.body.type)(object.body)}`;
+    });
+    this.map.set('NewExpression', (object) => {
+      return `a new instantiation of the class ${this.map.get(object.callee.type)(object.callee)}`;
+    });
     this.map.set('ConditionalExpression', (object) =>
       `${this.dictionary.conditional_expression_1} ${this.map.get(object.test.type)(object.test)}
       ${this.dictionary.conditional_expression_2} ${this.map.get(object.consequent.type)(object.consequent)},
@@ -64,13 +84,13 @@ class OptionsMap {
 
     this.map.set('FunctionExpression', (object) =>
       `${this.dictionary.function_expression_1}${
-        object.params.length ? ` ${this.dictionary.function_expression_2} ${object.params.map(param => map.get(param.type)(param)).join(', ')} ${this.dictionary.function_expression_3}` : ''
+        object.params.length ? ` ${this.dictionary.function_expression_2} ${object.params.map(param => this.map.get(param.type)(param)).join(', ')} ${this.dictionary.function_expression_3}` : ''
       }, ${this.dictionary.function_expression_4}:
       ${this.map.get(object.body.type)(object.body)}`);
 
     this.map.set('CallExpression', (object) =>  {
-      return `${this.dictionary.call_expression_1} ${this.map.get(object.callee.type)(object.callee)} ${this.dictionary.call_expression_2} ${object.arguments.map(arg => map.get(arg.type)(arg)).join(', ')} ${this.dictionary.call_expression_3}`;
-      });
+      return `${this.dictionary.call_expression_1} ${this.map.get(object.callee.type)(object.callee)} ${this.dictionary.call_expression_2} ${object.arguments.map(arg => this.map.get(arg.type)(arg)).join(', ')} ${this.dictionary.call_expression_3}`;
+    });
 
     this.map.set('FunctionDeclaration', (object) =>
       `${this.dictionary.function_declaration_1} ${this.map.get(object.id.type)(object.id)} ${this.dictionary.function_declaration_2}
@@ -78,14 +98,18 @@ class OptionsMap {
       ${this.map.get(object.body.type)(object.body)}`);
 
     this.map.set('BlockStatement', (object) =>
-      `${object.body.map(line => tab + this.map.get(line.type)(line) + '\n').join('')}`);
+      `${object.body.map(line => this.tab + this.map.get(line.type)(line) + '\n').join('')}`);
+
+    this.map.set('BreakStatement', (object) => `breaks (terminates) the outer loop`);
+
+    this.map.set('ContinueStatement', (object) => `stops current iteration and moves onto the next`);
 
     this.map.set('ArrowFunctionExpression', (object) => {
       if (!object.body.body) {
         return `${this.dictionary.arrow_function_expression_1} ${object.params.map(param => this.map.get(param.type)(param)).join(', ')} ${this.dictionary.arrow_function_expression_2} ${this.map.get(object.body.type)(object.body)}`
       }
       return `${this.dictionary.arrow_function_expression_1} ${object.params.map(param => this.map.get(param.type)(param)).join(', ')} ${this.dictionary.arrow_function_expression_3}
-      ${tab}${object.body.body.map(line => this.map.get(line.type)(line)).join('\n')}`
+      ${this.tab}${object.body.body.map(line => this.map.get(line.type)(line)).join('\n')}`
     });
 
     this.map.set('ReturnStatement', (object) => `${this.dictionary.return_statement} ${this.map.get(object.argument.type)(object.argument)}`);
@@ -98,8 +122,7 @@ class OptionsMap {
       }
     );
 
-    this.map.set('ObjectExpression', (object) =>
-      `${this.dictionary.object_expression_1} ${object.properties.map(el =>
+    this.map.set('ObjectExpression', (object) => `${this.dictionary.object_expression_1} ${object.properties.map(el =>
         `${this.map.get(el.key.type)(el.key)}:${this.map.get(el.value.type)(el.value)}`).join(', ')
       }`);
 
@@ -107,7 +130,7 @@ class OptionsMap {
       `${this.dictionary.class_declaration_1} ${this.map.get(object.id.type)(object.id)} ${this.map.get(object.body.type)(object.body)}`);
 
     this.map.set('ClassBody', (object) =>
-      `${this.dictionary.class_body_1} ${object.body.length} ${this.dictionary.class_body_2}: \n  ${object.body.map(method => map.get(method.type)(method)).join(`${tab}${this.dictionary.and} `)}`);
+      `${this.dictionary.class_body_1} ${object.body.length} ${this.dictionary.class_body_2}: \n  ${object.body.map(method => this.map.get(method.type)(method)).join(`${this.tab}${this.dictionary.and} `)}`);
 
     this.map.set('MethodDefinition', (object) => {
       if (object.kind === 'constructor') {
@@ -124,6 +147,25 @@ class OptionsMap {
         ? `${this.map.get(object.argument.type)(object.argument)} ${this.dictionary.update_expression_1}`
         : `${this.map.get(object.argument.type)(object.argument)} ${this.dictionary.update_expression_2}`
     );
+
+    this.map.set('SwitchStatement', (object) => {
+      return `Switch statement: evaluates the expression (${this.map.get(object.discriminant.type)(object.discriminant)}) and compares the result to the below statements:
+        ${object.cases.map(eachCase => this.map.get(eachCase.type)(eachCase)).join('\n')}
+      `
+    })
+
+    this.map.set('SwitchCase', (object) => {
+      if (object.test ===null) {
+        return `\tif none of the above cases matches the expression, then the below is executed:
+            ${object.consequent.map(cons => this.map.get(cons.type)(cons)).join('\n')}`;
+      }
+      else return `if the expression evaluates to ${this.map.get(object.test.type)(object.test)} then execute:
+            ${object.consequent.map(hi => this.map.get(hi.type)(hi)).join('\n')}`;
+    })
+
+    this.map.set('EmptyStatement', (object) => {
+      return "";
+    })
 
     this.map.set('UnaryExpression', (object) => {
       const argument = object.argument;
