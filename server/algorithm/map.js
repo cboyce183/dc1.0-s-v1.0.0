@@ -23,11 +23,14 @@ map.set('VariableDeclarator', (object) =>
   `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`);
 
 map.set('IfStatement', (object, statement = 'if') => {
-  const alternate = object.alternate.type === 'IfStatement'
+  let alternate = undefined;
+  if (object.alternate) {
+    alternate = object.alternate.type === 'IfStatement'
         ? map.get(object.alternate.type)(object.alternate, 'else if')
-        : 'else, in the case none of the previous conditions are met:\n' + tab + map.get(object.alternate.type)(object.alternate)
+        : 'else, in the case none of the previous conditions are met:\n' + tab + map.get(object.alternate.type)(object.alternate);
+  }
   return `${statement} ${map.get(object.test.type)(object.test)} resolves to true, executes:
-  ${map.get(object.consequent.type)(object.consequent)}${alternate}`;
+  ${map.get(object.consequent.type)(object.consequent)} ${(object.alternate) ? alternate : ''}`;
 })
 
 map.set('ConditionalExpression', (object) =>
