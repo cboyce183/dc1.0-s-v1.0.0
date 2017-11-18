@@ -66,6 +66,10 @@ map.set('FunctionExpression', (object) =>
   }, which when called:
   ${map.get(object.body.type)(object.body)}`);
 
+map.set('CallExpression', (object) =>  {
+  return `the output of ${map.get(object.callee.type)(object.callee)} called using ${object.arguments.map(arg => map.get(arg.type)(arg)).join(', ')} as arguments`;
+  });
+
 map.set('FunctionDeclaration', (object) =>
   `Declaration of a function named ${map.get(object.id.type)(object.id)} that takes
    ${object.params.map(param => map.get(param.type)(param)).join(', ')} as arguments, which when called:
