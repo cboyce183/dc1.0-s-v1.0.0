@@ -103,11 +103,11 @@ class App extends Component {
             <LogoAnim />
             <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
               <div className="about-button" onClick={this.handleAboutClick}>
-                <p className="about-button-text">about</p>
+                <p className="about-button-text">ABOUT</p>
               </div>
               <div className="spacer" style={{width:'2vw'}}></div>
               <div className="about-button">
-                <p className="about-button-text">Eng</p>
+                <p className="about-button-text">ENG</p>
               </div>
             </div>
           </div>
