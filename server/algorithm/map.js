@@ -5,8 +5,11 @@ map.set('Literal', (object) => object.value);
 
 map.set('Identifier', (object) => object.name);
 
+//Missing a better string explaining function of this keyword
+map.set('ThisExpression', (object) => 'this');
+
 map.set('ExpressionStatement', (object) =>
-        map.get(object.expression.type)(object.expression));
+  map.get(object.expression.type)(object.expression));
 
 map.set('VariableDeclaration', (object) => {
   const declarations = object.declarations;
@@ -17,26 +20,31 @@ map.set('VariableDeclaration', (object) => {
   return `${object.declarations.length} ${object.kind}${variableText} ${joinedText}`
 })
 map.set('VariableDeclarator', (object) =>
-        `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`);
+  `${map.get(object.id.type)(object.id)} is assigned to ${map.get(object.init.type)(object.init)}`);
 
 map.set('ConditionalExpression', (object) =>
-        `Ternary expression which checks if ${map.get(object.test.type)(object.test)} is true: if it is, it returns ${map.get(object.consequent.type)(object.consequent)}, otherwise it returns ${map.get(object.alternate.type)(object.alternate)}`);
+  `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
+   is true: if it is, it returns ${map.get(object.consequent.type)(object.consequent)},
+   otherwise: it returns ${map.get(object.alternate.type)(object.alternate)}`);
 
-map.set('LogicalExpression', (object) => {
-  return (object.operator === '&&')
+map.set('LogicalExpression', (object) =>
+  object.operator === '&&'
   ? `boolean of ${map.get(object.left.type)(object.left)} AND ${map.get(object.right.type)(object.right)}`
-  : `boolean of ${map.get(object.left.type)(object.left)} OR ${map.get(object.right.type)(object.right)}`
-})
+  : `boolean of ${map.get(object.left.type)(object.left)} OR ${map.get(object.right.type)(object.right)}`);
 
 map.set('FunctionExpression', (object) =>
-  `a function that takes ${object.params.map(param => map.get(param.type)(param)).join(', ')} as arguments, which when called:
+  `a function${
+    object.params.length ? ' that takes ' + object.params.map(param => map.get(param.type)(param)).join(', ') + ' as arguments' : ''
+  }, which when called:
   ${map.get(object.body.type)(object.body)}`);
 
 map.set('FunctionDeclaration', (object) =>
-  `Declaration of a function named ${map.get(object.id.type)(object.id)} that takes ${object.params.map(param => map.get(param.type)(param)).join(', ')} as arguments, which when called:
+  `Declaration of a function named ${map.get(object.id.type)(object.id)} that takes
+   ${object.params.map(param => map.get(param.type)(param)).join(', ')} as arguments, which when called:
   ${map.get(object.body.type)(object.body)}`);
 
-map.set('BlockStatement', (object) => `${object.body.map(line => tab + map.get(line.type)(line) + '\n').join(tab)}`);
+map.set('BlockStatement', (object) =>
+  `${object.body.map(line => tab + map.get(line.type)(line) + '\n').join(tab)}`);
 
 map.set('ArrowFunctionExpression', (object) => {
   if (!object.body.body) {
@@ -74,9 +82,8 @@ map.set('MethodDefinition', (object) => {
   return `a method named ${map.get(object.key.type)(object.key)} which is ${map.get(object.value.type)(object.value)}`
 });
 
-map.set('MemberExpression', (object) => {
-  console.log(object)
-});
+map.set('MemberExpression', (object) =>
+        `property ${map.get(object.property.type)(object.property)} of ${map.get(object.object.type)(object.object)}`);
 
 map.set('UpdateExpression', (object) =>
   object.operator === '++'
