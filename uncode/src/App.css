@@ -54,12 +54,13 @@ body {
 }
 
 .Text {
-  width: 48.5%;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   border: none;
   text-align: top;
   margin: auto;
   resize: none;
+  overflow: hidden;
 }
 
 .Text:focus {
@@ -89,4 +90,28 @@ body {
 textarea {
   font-family: Courier New, Courier, monospace;
   font-size: 12px;
+}
+
+.Quill {
+  background-color: white;
+  margin-top: 13px;
+}
+
+.LineNumbers {
+  overflow: hidden;
+  border: none;
+  resize: none;
+  width: 25px;
+  cursor: default;
+  height: 100%;
+}
+
+.LineNumbers:focus {
+  outline:none;
+}
+
+.Editor {
+  height: 700px;
+  width: 49.5%;
+  display: flex;
 }
