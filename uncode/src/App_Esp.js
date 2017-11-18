@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
+import './App.css';
 
 import { LogoAnim } from './logo/logo-anim';
 
 import SocketIoClient from 'socket.io-client';
 
-import Text from './Text';
-
-import './App.css';
 const _ = require('lodash');
 
 
@@ -24,38 +20,15 @@ class App extends Component {
     }
   }
 
-  handleFileChange = files => {
-    try { var reader = new FileReader();
-    reader.onload = () => {
-      this.inputText.value = reader.result;
-      console.log(reader.result)
-    }
-    console.log(reader.readAsText(files[0]));
-  } catch (e) {
-    alert('Invalid file type, please upload a JavaScript file');
-    }
-  }
-
   componentDidMount() {
     this.socket.on('receive', (data) => {
-      if (data) this.setState({outputText: data});
-      else this.setState({outputText: 'come on! Keep typing! :)'});
+      console.log(data)
+      this.setState({outputText: data});
     })
   }
 
-  handleTextChange = (value) => {
-    this.socket.emit('send', value);
-  }
-
-  //=============================================== REDERING
-
-  renderLineNumbers () {
-    const linesArr = new Array(50).fill(undefined);
-    return (
-      <div className="LineNumbers">
-        {linesArr.map((el, i) => (('0'+(i+1)).slice(-2))).join('\n')}
-      </div>
-    );
+  handleTextChange = () => {
+    this.socket.emit('send', this.inputText.value);
   }
 
   handleAboutClick = () => {
@@ -79,16 +52,16 @@ class App extends Component {
   renderAboutWindow = () => {
     if (this.state.aboutFlag) return (
       <div className="about-container" onClick={this.handleAboutClick}>
-        <h1 className="about-title">Made by developers, useful for everyone.</h1>
+        <h1 className="about-title">Hecho por desarolladores, util para todos.</h1>
         <img src={require('./assets/icons8-multicultural-people-100.png')} style={{height:'80px'}}/>
-        <h3 className="about-text">uncode.js is a tool for learning how to code JavaScript in the most humanly friendly way possible: code, but in your own, comfortable native language.</h3>
+        <h3 className="about-text">uncode.js es una herramienta de aprendizaje, utilizada para aprender JavaScript en la forma mas humana y fácil posible: traduce el codigo a tu lengua nativa! </h3>
         <div style={{display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', justifyContent: 'space-around'}}>
           <p style={{fontFamily: 'Courier New, monospace;'}}>var foo = 10 + 5;</p>
           <img src={require('./assets/icons8-right-100.png')} style={{height:'30px', padding: '20px'}}/>
-          <p>1 var variable foo is assigned to 10 + 5</p>
+          <p>1 var variable foo es asignada a 10 + 5</p>
         </div>
-        <h3 className="about-text">Simply start coding, or copy in some code from elsewhere, and read the steps the complier takes to run the code in terms anyone can understand. It is that simple!</h3>
-        <h3 className="about-text">The Team: </h3>
+        <h3 className="about-text">Escribe codigo, o copialo de alguna parte, y lee los pasos que el compilador toma para ejecutar el codigo en terminos que cualquiera puede entender. Es así de sencillo!</h3>
+        <h3 className="about-text">El Equipo: </h3>
         <div style={{display:'flex', flexFlow:'row nowrap',justifyContent:'space-around', paddingBottom:'5vh', width:'40%'}}>{this.renderTeam()}</div>
       </div>
     )
@@ -103,7 +76,7 @@ class App extends Component {
             <LogoAnim />
             <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
               <div className="about-button" onClick={this.handleAboutClick}>
-                <p className="about-button-text">about</p>
+                <p className="about-button-text">Información</p>
               </div>
               <div className="spacer" style={{width:'2vw'}}></div>
               <div className="about-button">
@@ -115,27 +88,19 @@ class App extends Component {
         <div>
           <div className="MaxWidthMain">
             <div className="Explanation">
-              <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p>Bienvenido a uncode! Una nueva plataforma que simplifica y traduce tu codigo de JavaScript a idioma humano. </p>
             </div>
-            {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-              <ReactFileReader handleFiles={this.handleFileChange} 
-                              fileTypes={'.js'}>
-                <button className="">Upload</button>
-              </ReactFileReader>
-            </Dropzone> */}
             <div className="Form">
-              <Text
-                func={this.handleTextChange.bind(this)}
-                placeholder="INSERT CODE HERE"
-              />
+              <textarea
+                ref={el => this.inputText = el}
+                onChange={this.handleTextChange}
+                className="Text"
+              placeholder="INSERT CODE HERE"/>
               <div className="Separator"></div>
-              <div className="Editor">
-                {this.renderLineNumbers()}
-                <textarea
-                  className="Text"
-                  value={this.state.outputText}
-                  placeholder="OUTPUT GOES HERE"/>
-              </div>
+              <textarea
+                className="Text"
+                value={this.state.outputText}
+              placeholder="OUTPUT GOES HERE"/>
             </div>
           </div>
         </div>
