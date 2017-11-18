@@ -36,14 +36,20 @@ class App extends Component {
         </nav>
         <div>
           <div className="MaxWidth">
+            <div className="Explanation">
+              <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+            </div>
             <div className="Form">
-              <input
+              <textarea
                 ref={el => this.inputText = el}
-                type="text"
                 onChange={this.handleTextChange}
-                className="Text"/>
+                className="Text"
+                placeholder="INSERT CODE HERE"/>
               <div className="Separator"></div>
-              <input className="Text" value={this.state.outputText} placeholder="OUTPUT GOES HERE"/>
+              <textarea
+                className="Text"
+                value={this.state.outputText}
+                placeholder="OUTPUT GOES HERE"/>
             </div>
           </div>
         </div>

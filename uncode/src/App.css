@@ -1,42 +1,27 @@
-.App {
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500');
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-* {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-}
 body {
-  background-color: rgb(102, 46, 46)
+  background-color: #3B5998;
 }
 .App {
   text-align: center;
+}
+
+.Explanation {
+  margin: 0;
+  padding: 0;
+}
+
+.Explanation > p {
+  font-family: 'Roboto';
+  margin: 0;
+  padding: 0;
+  padding-top: 80px;
+  font-weight: 100;
+  color: white;
+  text-align: center;
+  font-size: 18.9px;
+  margin-bottom: 30px;
 }
 
 .Header {
@@ -47,7 +32,9 @@ body {
 }
 
 .MaxWidth > h1 {
+  font-family: 'Roboto';
   font-size: 30px;
+  font-weight: 300;
   margin: 0;
   margin-top: 8px;
   text-align: left;
@@ -56,22 +43,23 @@ body {
 }
 
 .MaxWidth {
-  width: 960px;
+  width: 1120px;
   margin: auto;
 }
 
 .Form {
   width: 100%;
-  padding-top: 150px;
   display: flex;
   justify-content: space-between;
 }
 
 .Text {
-  width: 49%;
-  height: 600px;
+  width: 48.5%;
+  height: 700px;
   border: none;
   text-align: top;
+  margin: auto;
+  resize: none;
 }
 
 .Text:focus {
@@ -98,7 +86,7 @@ body {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+textarea {
+  font-family: Courier New, Courier, monospace;
+  font-size: 12px;
 }
