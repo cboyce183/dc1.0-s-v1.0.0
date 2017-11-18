@@ -20,7 +20,7 @@ map.set('VariableDeclaration', (object) => {
   return `${object.declarations.length} ${object.kind}${variableText} ${joinedText}`
 })
 map.set('VariableDeclarator', (object) =>
-  `${map.get(object.id.type)(object.id)} es asignada a ${map.get(object.init.type)(object.init)}`);
+  `${map.get(object.id.type)(object.id)} es asignado(a) a ${map.get(object.init.type)(object.init)}`);
 
 map.set('ConditionalExpression', (object) =>
   `Expresion ternaria que revisa si ${map.get(object.test.type)(object.test)}
@@ -87,8 +87,8 @@ map.set('MemberExpression', (object) =>
 
 map.set('UpdateExpression', (object) =>
   object.operator === '++'
-    ? `${map.get(object.argument.type)(object.argument)} incrementado por 1`
-    : `${map.get(object.argument.type)(object.argument)} disminuido por 1`
+    ? `${map.get(object.argument.type)(object.argument)} incrementado(a) por 1`
+    : `${map.get(object.argument.type)(object.argument)} disminuido(a) por 1`
 );
 
 map.set('UnaryExpression', (object) => {
@@ -97,9 +97,9 @@ map.set('UnaryExpression', (object) => {
   switch(object.operator) {
     case '!':
       return `lo opuesto al valor booleano de ${nextTextValue(argument)}`;
-    case '+':
-      return `negativo ${nextTextValue(argument)}`;
     case '-':
+      return `negativo ${nextTextValue(argument)}`;
+    case '+':
       return nextTextValue(argument);
     case '~':
       return `el bitwise opuesto de ${nextTextValue(argument)}`;
@@ -124,7 +124,7 @@ map.set('BinaryExpression', (object) => {
     case '**':
       return `${map.get(object.left.type)(object.left)} a la potencia de ${map.get(object.right.type)(object.right)}`
     case '/':
-      return `${map.get(object.left.type)(object.left)} dividido por ${map.get(object.right.type)(object.right)}`
+      return `${map.get(object.left.type)(object.left)} dividido(a) por ${map.get(object.right.type)(object.right)}`
     case '&':
       return `la operación bitwise Y de ${map.get(object.left.type)(object.left)} y ${map.get(object.right.type)(object.right)}`; 
     case '|':
@@ -132,11 +132,11 @@ map.set('BinaryExpression', (object) => {
     case '^':
       return `la operación bitwise XOR de ${map.get(object.left.type)(object.left)} y ${map.get(object.right.type)(object.right)}`; 
     case '<<':
-      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado ${map.get(object.right.type)(object.right)} bits a la izquierda`; 
+      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado(a) ${map.get(object.right.type)(object.right)} bits a la izquierda`; 
     case '>>':
-      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado ${map.get(object.right.type)(object.right)} bits a la derecha`; 
+      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado(a) ${map.get(object.right.type)(object.right)} bits a la derecha`; 
     case '>>>':
-      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado ${map.get(object.right.type)(object.right)} bits a la derecha y relleno de zeros desde la izquierda`; 
+      return `la representación binaria de ${map.get(object.left.type)(object.left)} desplazado(a) ${map.get(object.right.type)(object.right)} bits a la derecha y relleno de zeros desde la izquierda`; 
     case '<':
       return `el valor booleano de ${map.get(object.left.type)(object.left)} es menor que ${map.get(object.right.type)(object.right)}`; 
     case '<=':
@@ -154,9 +154,9 @@ map.set('BinaryExpression', (object) => {
     case '===':
       return `el valor booleano de ${map.get(object.left.type)(object.left)} es profundamente igual a ${map.get(object.right.type)(object.right)}`; 
     case 'instanceof':
-      return `el valor booleano de si ${map.get(object.left.type)(object.left)} fue construido del prototipo de ${map.get(object.right.type)(object.right)}`; 
+      return `el valor booleano de si ${map.get(object.left.type)(object.left)} fue construido(a) del prototipo de ${map.get(object.right.type)(object.right)}`; 
     case '%':
-      return `el remanente de ${map.get(object.left.type)(object.left)} dividido por ${map.get(object.right.type)(object.right)}`;
+      return `el remanente de ${map.get(object.left.type)(object.left)} dividido(a) por ${map.get(object.right.type)(object.right)}`;
   }
 });
 
@@ -185,13 +185,13 @@ map.set('AssignmentExpression', (object) => {
       operatorText = 'el remanente de la divisioón de sí mismo por ';
       break;
     case '<<=':
-      operatorText = 'sí mismo desplazado en bitwise hacia la izquierda por ';
+      operatorText = 'sí mismo desplazado(a) en bitwise hacia la izquierda por ';
       break;
     case '>>=':
-      operatorText = 'sí mismo desplazado en bitwise hacia la derecha por ';
+      operatorText = 'sí mismo desplazado(a) en bitwise hacia la derecha por ';
       break;
     case '>>>=':
-      operatorText = 'sí mismo relleno de zeros por la izquierda y desplazado en bitwise hacia la derecha por ';
+      operatorText = 'sí mismo relleno de zeros por la izquierda y desplazado(a) en bitwise hacia la derecha por ';
       break;
     case '&=':
       operatorText = 'el bitwise Y de sí mismo y ';
@@ -203,7 +203,7 @@ map.set('AssignmentExpression', (object) => {
       operatorText = 'el bitwise O de sí mismo y ';
       break;
   }
-  return `${map.get(object.left.type)(object.left)} es asignado a ${operatorText}${map.get(object.right.type)(object.right)}`
+  return `${map.get(object.left.type)(object.left)} es asignado(a) a ${operatorText}${map.get(object.right.type)(object.right)}`
 });
 
 module.exports = map;
