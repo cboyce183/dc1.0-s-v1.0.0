@@ -38,7 +38,7 @@ class App extends Component {
         <div>
           <div className="MaxWidth">
             <div className="Explanation">
-              <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p>Welcome to uncode! A new platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
             <div className="Form">
               <textarea
