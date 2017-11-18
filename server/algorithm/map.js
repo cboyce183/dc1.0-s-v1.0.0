@@ -30,8 +30,8 @@ map.set('IfStatement', (object, statement = 'if') => {
   let alternate = undefined;
   if (object.alternate) {
     alternate = object.alternate.type === 'IfStatement'
-        ? map.get(object.alternate.type)(object.alternate, 'else if')
-        : 'else, in the case none of the previous conditions are met:\n' + tab + map.get(object.alternate.type)(object.alternate);
+        ? map.get(object.alternate.type)(object.alternate, '\n  else if')
+        : '\n  else, in the case none of the previous conditions are met:\n' + tab + map.get(object.alternate.type)(object.alternate);
   }
   return `${statement} ${map.get(object.test.type)(object.test)} resolves to true, executes:
   ${map.get(object.consequent.type)(object.consequent)} ${(object.alternate) ? alternate : ''}`;
@@ -42,13 +42,32 @@ map.set('ForStatement', (object) => {
   let condition = map.get(object.test.type)(object.test);
   let update = map.get(object.update.type)(object.update);
   let doThing = map.get(object.body.type)(object.body);
-  return init + `; while ` + condition + ` is true,\n  ` + doThing + `\t` + update;
+  return init + `; while ` + condition + ` evaluates to true,\n  ` + doThing + `\t` + update;
+  }
+)
+
+map.set('ForInStatement', (object) => {
+  return `for each element in ${map.get(object.right.type)(object.right)}, executes:
+    ${map.get(object.body.type)(object.body)}`;
+  }
+)
+
+map.set('ForOfStatement', (object) => {
+  return `for each element in ${map.get(object.right.type)(object.right)}, executes:
+    ${map.get(object.body.type)(object.body)}`;
   }
 )
 
 map.set('WhileStatement', (object) => {
-  return `while ${map.get(object.test.type)(object.test)} is true, \n${map.get(object.body.type)(object.body)} `;
+  return `while ${map.get(object.test.type)(object.test)} evaluates to true, 
+  ${map.get(object.body.type)(object.body)} `;
 })
+
+map.set('DoWhileStatement', (object) => {
+  return `while ${map.get(object.test.type)(object.test)} evaluates to true, executes
+  ${map.get(object.body.type)(object.body)}`;
+});
+
 
 map.set('ConditionalExpression', (object) =>
   `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
@@ -66,6 +85,10 @@ map.set('FunctionExpression', (object) =>
   }, which when called:
   ${map.get(object.body.type)(object.body)}`);
 
+map.set('NewExpression', (object) => {
+  return `a new instantiation of the class ${map.get(object.callee.type)(object.callee)}`;
+})
+
 map.set('CallExpression', (object) =>  {
   return `the output of ${map.get(object.callee.type)(object.callee)} called using ${object.arguments.map(arg => map.get(arg.type)(arg)).join(', ')} as arguments`;
   });
@@ -77,6 +100,11 @@ map.set('FunctionDeclaration', (object) =>
 
 map.set('BlockStatement', (object) =>
   `${object.body.map(line => tab + map.get(line.type)(line) + '\n').join('')}`);
+
+map.set('BreakStatement', (object) => `breaks (terminates) the outer loop`);
+
+map.set('ContinueStatement', (object) => `stops current iteration and moves onto the next`);
+
 
 map.set('ArrowFunctionExpression', (object) => {
   if (!object.body.body) {
@@ -97,8 +125,8 @@ map.set('ArrayExpression', (object) => {
 );
 
 map.set('ObjectExpression', (object) =>
-  `an object of key:value pairs of ${object.properties.map(el =>
-    `${map.get(el.key.type)(el.key)}:${map.get(el.value.type)(el.value)}`).join(', ')
+  `an object of (key: value) pairs of ${object.properties.map(el =>
+    `(${map.get(el.key.type)(el.key)}: ${map.get(el.value.type)(el.value)})`).join(', ')
   }`);
 
 map.set('ClassDeclaration', (object) =>
@@ -122,6 +150,26 @@ map.set('UpdateExpression', (object) =>
     ? `${map.get(object.argument.type)(object.argument)} is increased by 1`
     : `${map.get(object.argument.type)(object.argument)} is decreased by 1`
 );
+
+map.set('SwitchStatement', (object) => {
+  return `Switch statement: evaluates the expression (${map.get(object.discriminant.type)(object.discriminant)}) and compares the result to the below statements:
+    ${object.cases.map(eachCase => map.get(eachCase.type)(eachCase)).join('\n')}
+  ` 
+})
+
+map.set('SwitchCase', (object) => {
+
+  if (object.test ===null) {
+    return `\tif none of the above cases matches the expression, then the below is executed: 
+        ${object.consequent.map(cons => map.get(cons.type)(cons)).join('\n')}`;
+    }
+  else return `if the expression evaluates to ${map.get(object.test.type)(object.test)} then execute:
+        ${object.consequent.map(hi => map.get(hi.type)(hi)).join('\n')}`;
+})
+
+map.set('EmptyStatement', (object) => {
+  return "";
+})
 
 map.set('UnaryExpression', (object) => {
   const argument = object.argument;
