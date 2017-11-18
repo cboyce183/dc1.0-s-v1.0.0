@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ReactFileReader from 'react-file-reader';
+import Dropzone from 'react-dropzone';
 
 import SocketIoClient from 'socket.io-client';
 
@@ -17,6 +19,18 @@ class App extends Component {
       inputText: ''
     }
     this.lines = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
+  }
+
+  handleFileChange = files => {
+    try { var reader = new FileReader();
+    reader.onload = () => {
+      this.inputText.value = reader.result;
+      console.log(reader.result)
+    }
+    console.log(reader.readAsText(files[0]));
+  } catch (e) {
+    alert('Invalid file type, please upload a JavaScript file');
+    }
   }
 
   componentDidMount() {
@@ -51,6 +65,12 @@ class App extends Component {
             <div className="Explanation">
               <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
+            {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
+              <ReactFileReader handleFiles={this.handleFileChange} 
+                              fileTypes={'.js'}>
+                <button className="">Upload</button>
+              </ReactFileReader>
+            </Dropzone> */}
             <div className="Form">
               <Text 
                 func={this.handleTextChange.bind(this)}
