@@ -38,11 +38,13 @@ map.set('ForStatement', (object) => {
   let condition = map.get(object.test.type)(object.test);
   let update = map.get(object.update.type)(object.update);
   let doThing = map.get(object.body.type)(object.body);
-  return init + `; while ` + condition + ` is true,\n\t  ` + doThing + `\t\t` + update;
+  return init + `; while ` + condition + ` is true,\n  ` + doThing + `\t` + update;
   }
 )
 
-
+map.set('WhileStatement', (object) => {
+  return `while ${map.get(object.test.type)(object.test)} is true, \n${map.get(object.body.type)(object.body)} `;
+})
 
 map.set('ConditionalExpression', (object) =>
   `Ternary expression which checks if ${map.get(object.test.type)(object.test)}
@@ -66,7 +68,7 @@ map.set('FunctionDeclaration', (object) =>
   ${map.get(object.body.type)(object.body)}`);
 
 map.set('BlockStatement', (object) =>
-  `${object.body.map(line => tab + map.get(line.type)(line) + '\n').join(tab)}`);
+  `${object.body.map(line => tab + map.get(line.type)(line) + '\n').join('')}`);
 
 map.set('ArrowFunctionExpression', (object) => {
   if (!object.body.body) {
@@ -109,8 +111,8 @@ map.set('MemberExpression', (object) =>
 
 map.set('UpdateExpression', (object) =>
   object.operator === '++'
-    ? `${map.get(object.argument.type)(object.argument)} increased by 1`
-    : `${map.get(object.argument.type)(object.argument)} decreased by 1`
+    ? `${map.get(object.argument.type)(object.argument)} is increased by 1`
+    : `${map.get(object.argument.type)(object.argument)} is decreased by 1`
 );
 
 map.set('UnaryExpression', (object) => {
