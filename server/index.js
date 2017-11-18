@@ -20,9 +20,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('send', function(data) {
-    const textToSend = algorithm(data);
-    console.log(textToSend)
-    socket.emit('receive', textToSend)
+    socket.emit('receive', algorithm(data))
   })
 });
 
