@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import SocketIoClient from 'socket.io-client';
+import ReactFileReader from 'react-file-reader';
 
 class App extends Component {
 
@@ -11,7 +12,7 @@ class App extends Component {
     this.socket = SocketIoClient('http://localhost:4200');
     this.state = {
       outputText: '',
-      inputText: ''
+      inputText: '',
     }
   }
 
@@ -26,9 +27,22 @@ class App extends Component {
     this.socket.emit('send', this.inputText.value);
   }
 
+  handleFileChange = files => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      this.inputText.value = reader.result;
+      console.log(reader.result)
+    }
+    console.log(reader.readAsText(files[0]));
+  }
+
   render() {
     return (
       <div className="App">
+        <ReactFileReader handleFiles={this.handleFileChange} 
+                         fileTypes={'.js'}>
+          <button className='btn'>Upload</button>
+        </ReactFileReader>
         <nav className="Header">
           <div className="MaxWidth">
             <h1>UNCODE</h1>
