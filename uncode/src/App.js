@@ -7,6 +7,7 @@ import FacebookLogin from 'react-facebook-login';
 import { LogoAnim } from './logo/logo-anim';
 
 import SocketIoClient from 'socket.io-client';
+import axios from 'axios';
 
 import Text from './Text';
 
@@ -23,6 +24,7 @@ class App extends Component {
       outputText: '',
       inputText: '',
       aboutFlag: false,
+      name: '',
     }
   }
 
@@ -98,16 +100,19 @@ class App extends Component {
 
   responseFacebook = (res) => {
     console.log(res);
-    this.sendToBack(res);
+    if (res.name) {
+      this.setState({name: res.name})
+      this.sendToBack(res);
+    }
   }
 
-  sendToBack = async (res) => {
-    await fetch('http://192.168.0.101:4200/login', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'default',
-      body: res,
-    });
+  sendToBack = (res) => {
+    console.log('send', res);
+    axios.post('http://192.168.0.101:4200/login', {
+      ...res,
+    }).then(res => {
+      console.log(res.body)
+    })
   }
 
   render() {
@@ -118,13 +123,15 @@ class App extends Component {
           <div className="MaxWidth">
             <LogoAnim />
             <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
-              <FacebookLogin
-                appId="146642496064470"
-                autoLoad={true}
-                fields="name,email,picture"
-                onClick={this.sendToBack}
-                callback={this.responseFacebook}
-              />
+              {this.state.name ?
+                <div>Welcome {this.state.name} </div> :
+                <FacebookLogin
+                  appId="146642496064470"
+                  autoLoad={true}
+                  fields="name,email,picture"
+                  onClick={this.sendToBack}
+                  callback={this.responseFacebook}
+                /> }
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">about</p>
               </div>
