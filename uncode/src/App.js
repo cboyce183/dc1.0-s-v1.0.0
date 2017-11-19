@@ -101,7 +101,10 @@ class App extends Component {
   responseFacebook = (res) => {
     console.log(res);
     if (res.name) {
-      this.setState({name: res.name})
+      this.setState({
+        name: res.name,
+        id: res.id
+        })
       this.sendToBack(res);
     }
   }
@@ -110,8 +113,6 @@ class App extends Component {
     console.log('send', res);
     axios.post('http://192.168.0.101:4200/login', {
       ...res,
-    }).then(res => {
-      console.log(res.body)
     })
   }
 
