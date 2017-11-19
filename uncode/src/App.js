@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ReactFileReader from 'react-file-reader';
 import Dropzone from 'react-dropzone';
 
+import FacebookLogin from 'react-facebook-login';
+
 import { LogoAnim } from './logo/logo-anim';
 
 import SocketIoClient from 'socket.io-client';
@@ -94,6 +96,20 @@ class App extends Component {
     )
   }
 
+  responseFacebook = (res) => {
+    console.log(res);
+    this.sendToBack(res);
+  }
+
+  sendToBack = async (res) => {
+    await fetch('http://192.168.0.101:4200/login', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'default',
+      body: res,
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -102,6 +118,13 @@ class App extends Component {
           <div className="MaxWidth">
             <LogoAnim />
             <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
+              <FacebookLogin
+                appId="146642496064470"
+                autoLoad={true}
+                fields="name,email,picture"
+                onClick={this.sendToBack}
+                callback={this.responseFacebook}
+              />
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">about</p>
               </div>
@@ -118,7 +141,7 @@ class App extends Component {
               <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
             {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-              <ReactFileReader handleFiles={this.handleFileChange} 
+              <ReactFileReader handleFiles={this.handleFileChange}
                               fileTypes={'.js'}>
                 <button className="">Upload</button>
               </ReactFileReader>
