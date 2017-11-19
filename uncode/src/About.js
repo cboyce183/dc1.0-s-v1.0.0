@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
-
-import { LogoAnim } from './logo/logo-anim';
-
-import SocketIoClient from 'socket.io-client';
 
 import './App.css';
 const _ = require('lodash');
@@ -21,9 +15,28 @@ class About extends Component {
     arr = _.shuffle(arr);
     return arr.map( el => {
       return (
-        <a href={el.url} style={{textDecoration:'none'}}>
-          <div style={{padding:'5px',width:'60px',height:'60px',borderRadius:'35px', backgroundColor:'rgb(64,89,147)',display:'flex',justifyContent:'space-around',alignItems:'center'}}>
-            <p style={{fontFamily: 'Roboto', fontWeight: '300', color: 'white', textAlign: 'center'}}>{el.name}</p>
+        <a
+          href={el.url}
+          style={{textDecoration:'none'}}
+          target="_blank">
+          <div
+            style={{
+              padding:'5px',
+              width:'60px',
+              height:'60px',
+              borderRadius:'35px',
+              backgroundColor:'rgb(64,89,147)',
+              display:'flex',
+              justifyContent:'space-around',
+              alignItems:'center'
+            }}>
+            <p
+              style={{
+                fontFamily: 'Roboto',
+                fontWeight: '300',
+                color: 'white',
+                textAlign: 'center'
+              }}>{el.name}</p>
           </div>
         </a>
       )
@@ -38,7 +51,7 @@ class About extends Component {
           <div className="about-container">
             <h1 className="about-title">MADE BY DEVELOPERS FOR FUTURE DEVELOPERS</h1>
             <img
-              alt="image"
+              alt="People"
               src={require('./assets/icons8-multicultural-people-100.png')}
               style={{height:'80px'}}/>
             <h3 className="about-text">

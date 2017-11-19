@@ -7,7 +7,6 @@ export class LogoAnim extends Component {
     this.state = {
       flag: false,
     }
-    this.wait;
   }
   componentDidMount () {
     setTimeout( () => {
@@ -50,8 +49,8 @@ export class LogoAnim extends Component {
     return (
       <div className="container" onClick={this.handleAnimationChange}>
         <div className="container">
-          <img className="logo" src={require('../assets/logobox.png')} style={this.wait}/>
-          <img className="logoback" src={require('../assets/logobox-background.png')} style={this.wait}/>
+          <img alt="logo" className="logo" src={require('../assets/logobox.png')} style={this.wait}/>
+          <img alt="logoBack" className="logoback" src={require('../assets/logobox-background.png')} style={this.wait}/>
         </div>
         {this.handleAnimation()}
       </div>

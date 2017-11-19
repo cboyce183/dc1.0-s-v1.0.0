@@ -13,7 +13,6 @@ import Text from './Text';
 import DragDrop from './Dropzone';
 
 import './App.css';
-const _ = require('lodash');
 
 class App extends Component {
 
@@ -57,8 +56,9 @@ class App extends Component {
   }
 
   handleFileLoad = (content) => {
-    this.setState({selected: 'editor'});
+    console.log(content);
     this.inputText = content;
+    this.setState({selected: 'editor'});
   }
 
   //=============================================== REDERING
@@ -73,18 +73,23 @@ class App extends Component {
   }
 
   renderTabSelection = () => {
-    return this.state.selected === 'editor'
-      ? (
+    if (this.state.selected === 'editor'){
+      return (
         <Text
-          // ref={this.inputText}
+          val={this.inputText}
           func={this.handleTextChange.bind(this)}
           placeholder="INSERT CODE HERE"
         />
-      ) : (
+      )
+    } else if (this.state.selected === 'upload') {
+      return (
         <DragDrop
           func={this.handleFileLoad.bind(this)}
         />
       )
+    } else {
+      return (<div>YOU'RE IN SNIPPETS NOW SON</div>)
+    }
   }
 
   responseFacebook = (res) => {
@@ -149,32 +154,39 @@ class App extends Component {
         <nav className="Header">
           <div className="MaxWidth">
             <LogoAnim />
-            <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
-              {this.state.name ?
-                <div>Welcome {this.state.name} </div> :
+            <div className="button-wrapper" style={{display:'flex', width:'380px', flexFlow:'row nowrap', alignItems:'center', justifyContent:'space-around'}}>
+              {this.state.name ? (
+                <div>Welcome {this.state.name} </div>
+              ) : (
                 <FacebookLogin
+                  cssClass="Facebook"
                   appId="146642496064470"
                   autoLoad={true}
                   fields="name,email,picture"
                   onClick={this.sendToBack}
                   callback={this.responseFacebook}
-                /> }
+                />
+               )}
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">ABOUT</p>
               </div>
-              <div className="spacer" style={{width:'2vw'}}></div>
-              <div className="lang-button"
-                style={{borderBottomLeftRadius: '2px', borderTopLeftRadius: '2px', borderRight: '1px solid #4664a7'}}
-                onClick={() => this.handleLanguageChange(1)}>
-                <p className="about-button-text">EN</p>
-              </div>
-              <div className="lang-button"
-                onClick={() => this.handleLanguageChange(2)}>
-                <p className="about-button-text">ES</p>
-              </div>
-              <div className="lang-button"
-                onClick={() => this.handleLanguageChange(3)}>
-                <p className="about-button-text">IT</p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexFlow: 'row nowrap',
+                width: '90px'
+              }}>
+                <div className="lang-button"
+                  style={{
+                    borderBottomLeftRadius: '2px',
+                    borderTopLeftRadius: '2px',
+                    borderRight: '1px solid #4664a7'
+                  }}
+                  onClick={() => this.handleLanguageChange(1)}>EN</div>
+                <div className="lang-button"
+                  onClick={() => this.handleLanguageChange(2)}>ES</div>
+                <div className="lang-button"
+                  onClick={() => this.handleLanguageChange(3)}>IT</div>
               </div>
             </div>
           </div>
@@ -182,7 +194,13 @@ class App extends Component {
         <div>
           <div className="MaxWidthMain">
             <div className="Explanation">
-              <p style={{textAlign: 'center', width: '100%'}}>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p style={{
+                textAlign: 'center',
+                width: '100%'
+              }}>
+                Welcome to uncode! The first platform that simplifies and translates 
+                convoluted JavaScript into plain human language.
+              </p>
             </div>
             <div className="TabSelector">
               <div
@@ -195,8 +213,12 @@ class App extends Component {
                   ? ' Selected'
                   : ''}`}
                 onClick={() => this.handleTabSelection('upload')}>upload</div>
-              {this.renderSave()}
-                  </div>
+              <div
+                className={`Tab${this.state.selected === 'snippets'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('snippets')}>snippets</div>
+            </div>
             <div className="Form">
               {this.renderTabSelection()}
               <div className="Editor">
