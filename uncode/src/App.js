@@ -22,6 +22,7 @@ class App extends Component {
       inputText: '',
       aboutFlag: false,
       language: 1,
+      selected: 'editor',
     }
   }
 
@@ -53,6 +54,14 @@ class App extends Component {
     this.setState({inputText: value})
     this.socket.emit('send', value, this.state.language);
   }
+  
+  handleTabSelection = (ref) => {
+    this.setState({selected: ref})
+  }
+
+  handleAboutClick = () => {
+    this.setState({aboutFlag:!this.state.aboutFlag})
+  }
 
   //=============================================== REDERING
 
@@ -65,8 +74,16 @@ class App extends Component {
     );
   }
 
-  handleAboutClick = () => {
-    this.setState({aboutFlag:!this.state.aboutFlag})
+  renderTabSelection = () => {
+    return this.state.selected === 'editor'
+      ? (
+        <Text
+          func={this.handleTextChange.bind(this)}
+          placeholder="INSERT CODE HERE"
+        />
+      ) : (
+        ''
+      )
   }
 
   render() {
@@ -102,7 +119,7 @@ class App extends Component {
         <div>
           <div className="MaxWidthMain">
             <div className="Explanation">
-              <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p style={{textAlign: 'center', width: '100%'}}>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
             {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
               <ReactFileReader handleFiles={this.handleFileChange} 
@@ -111,17 +128,19 @@ class App extends Component {
               </ReactFileReader>
             </Dropzone> */}
             <div className="TabSelector">
-              <div 
-                className="Tab Selected">editor</div>
-              <div 
-                className="Tab">upload</div>
+              <div
+                className={`Tab${this.state.selected === 'editor'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('editor')}>editor</div>
+              <div
+                className={`Tab${this.state.selected === 'upload'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('upload')}>upload</div>
             </div>
             <div className="Form">
-              <Text
-                func={this.handleTextChange.bind(this)}
-                placeholder="INSERT CODE HERE"
-              />
-              <div className="Separator"></div>
+              {this.renderTabSelection()}
               <div className="Editor">
                 {this.renderLineNumbers()}
                 <textarea

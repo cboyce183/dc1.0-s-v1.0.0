@@ -253,7 +253,7 @@ textarea {
   line-height: 29px;
   height: 30px;
   width:70px;
-  background-color: grey;
+  background-color: rgb(224, 224, 224);
 }
 
 .Selected {
