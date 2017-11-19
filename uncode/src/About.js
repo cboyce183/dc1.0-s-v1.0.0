@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
-
-import { LogoAnim } from './logo/logo-anim';
-
-import SocketIoClient from 'socket.io-client';
 
 import './App.css';
 const _ = require('lodash');
@@ -38,7 +32,7 @@ class About extends Component {
           <div className="about-container">
             <h1 className="about-title">MADE BY DEVELOPERS FOR FUTURE DEVELOPERS</h1>
             <img
-              alt="image"
+              alt="People"
               src={require('./assets/icons8-multicultural-people-100.png')}
               style={{height:'80px'}}/>
             <h3 className="about-text">

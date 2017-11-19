@@ -3,8 +3,12 @@ import React, { Component } from 'react';
 import './App.css';
 
 class Text extends Component {
+  componentDidMount () {
+    this.text.focus();
+    this.props.func(this.text.value);
+  }
 
-  convertKeys ( event ) {
+  convertKeys (event) {
     const start = this.text.selectionStart;
     const end = this.text.selectionEnd;
     if (event.key === 'Tab') {
@@ -44,7 +48,8 @@ class Text extends Component {
       <div className="Editor">
         {this.renderLineNumbers()}
         <textarea
-          // defaultValue={this.props.ref}
+          focus={true}
+          defaultValue={this.props.val}
           ref={el => this.text = el}
           onChange={() => this.props.func(this.text.value)}
           onKeyDown={(e) => this.convertKeys(e)}

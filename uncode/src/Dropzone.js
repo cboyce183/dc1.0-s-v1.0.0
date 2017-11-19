@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
 
 import './App.css';
 
@@ -23,12 +22,25 @@ class DragDrop extends Component {
 
   render() {
     return (
-      <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-        <ReactFileReader handleFiles={this.handleFileChange} 
-                        fileTypes={'.js'}>
-          <button className="">Upload</button>
-        </ReactFileReader>
-      </Dropzone>
+      <div className="Editor">
+        <div className="DropZone">
+          <p style={{
+            color: 'grey',
+            textAlign: 'center',
+            fontWeight: '300'
+          }}>select a file or drag and drop one into the button to analyze it in uncode.js</p>
+          <ReactFileReader
+            handleFiles={this.handleFileChange}
+            fileTypes={'.js'}>
+            <button className="about-button"
+              style={{
+                width: '100px',
+                fontFamily: 'Roboto',
+                fontWeight: '300'
+              }}>UPLOAD</button>
+          </ReactFileReader>
+        </div>
+      </div>
     );
   }
 }

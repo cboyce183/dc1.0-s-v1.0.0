@@ -13,7 +13,6 @@ import Text from './Text';
 import DragDrop from './Dropzone';
 
 import './App.css';
-const _ = require('lodash');
 
 class App extends Component {
 
@@ -55,8 +54,9 @@ class App extends Component {
   }
 
   handleFileLoad = (content) => {
-    this.setState({selected: 'editor'});
+    console.log(content);
     this.inputText = content;
+    this.setState({selected: 'editor'});
   }
 
   //=============================================== REDERING
@@ -74,7 +74,7 @@ class App extends Component {
     return this.state.selected === 'editor'
       ? (
         <Text
-          // ref={this.inputText}
+          val={this.inputText}
           func={this.handleTextChange.bind(this)}
           placeholder="INSERT CODE HERE"
         />
