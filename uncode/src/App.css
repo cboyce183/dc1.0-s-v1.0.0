@@ -274,7 +274,8 @@ textarea {
 
 .TabSelector {
   display: flex;
-  width: 140px;
+  width: 210px;
+  cursor: pointer;
 }
 
 .Tab {

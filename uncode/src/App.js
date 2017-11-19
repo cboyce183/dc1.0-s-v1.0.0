@@ -71,18 +71,23 @@ class App extends Component {
   }
 
   renderTabSelection = () => {
-    return this.state.selected === 'editor'
-      ? (
+    if (this.state.selected === 'editor'){
+      return (
         <Text
           val={this.inputText}
           func={this.handleTextChange.bind(this)}
           placeholder="INSERT CODE HERE"
         />
-      ) : (
+      )
+    } else if (this.state.selected === 'upload') {
+      return (
         <DragDrop
           func={this.handleFileLoad.bind(this)}
         />
       )
+    } else {
+      return (<div>YOU'RE IN SNIPPETS NOW SON</div>)
+    }
   }
 
   responseFacebook = (res) => {
@@ -152,7 +157,13 @@ class App extends Component {
         <div>
           <div className="MaxWidthMain">
             <div className="Explanation">
-              <p style={{textAlign: 'center', width: '100%'}}>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p style={{
+                textAlign: 'center',
+                width: '100%'
+              }}>
+                Welcome to uncode! The first platform that simplifies and translates 
+                convoluted JavaScript into plain human language.
+              </p>
             </div>
             <div className="TabSelector">
               <div
@@ -165,6 +176,11 @@ class App extends Component {
                   ? ' Selected'
                   : ''}`}
                 onClick={() => this.handleTabSelection('upload')}>upload</div>
+              <div
+                className={`Tab${this.state.selected === 'snippets'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('snippets')}>snippets</div>
             </div>
             <div className="Form">
               {this.renderTabSelection()}
