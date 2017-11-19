@@ -12,6 +12,7 @@ import axios from 'axios';
 import About from './About';
 
 import Text from './Text';
+import Save from './Save';
 import DragDrop from './Dropzone';
 
 import './App.css';
@@ -89,29 +90,29 @@ class App extends Component {
     })
   }
 
-saveSnip = () => {
-  if (!this.state.inputText) {
-    this.msg.error('No Input DickHead');
-  } else if (!this.refs.name.value) {
-    this.msg.error(`Can't save a snippet with no title! Please enter one!`);
-  } else {
-  axios.post('http://192.168.0.101:4200/snippet/save', {
-    code: this.state.inputText,
-    userId: this.state.id,
-    title: this.refs.name.value
-  }).then(res => {
-  console.log(res);
-  if (res.status === 203) {
-    this.msg.error('Snippet title is taken, please pick another one!');
-  } else if (res.status === 200) {
-    this.msg.success('Saved!')
-    this.refs.name.value = ''
-  } else {
-    this.msg.error('Server Down')
+  saveSnip = (name) => {
+    if (!this.state.inputText) {
+      this.msg.error('No Input DickHead');
+    } else if (!name.value) {
+      this.msg.error(`Can't save a snippet with no title! Please enter one!`);
+    } else {
+      axios.post('http://192.168.0.101:4200/snippet/save', {
+        code: this.state.inputText,
+        userId: this.state.id,
+        title: name.value
+      }).then(res => {
+      console.log(res);
+      if (res.status === 203) {
+        this.msg.error('Snippet title is taken, please pick another one!');
+      } else if (res.status === 200) {
+        this.msg.success('Saved!')
+        name.value = ''
+      } else {
+        this.msg.error('Server Down')
+      }
+      })
+    }
   }
-  })
-}
-}
 
   //=============================================== REDERING
 
@@ -143,21 +144,15 @@ saveSnip = () => {
       return (<Snippets id={this.state.id}/>)
     }
   }
- 
+
   renderSave = () => {
-    return this.state.id ?
-    <div className = "bSave">
-      <input
-        ref="name"
-        className="snippetName"
-        placeholder="Enter snippet Name"
+    return (this.state.id && this.state.selected === 'editor') ? (
+      <Save
+        func={this.saveSnip.bind(this)}
       />
-      <button
-        ref = "savingBut"
-        onClick={this.saveSnip}>
-        Save!
-      </button>
-    </div> : <div></div>
+    ) : (
+      ''
+    )
   }
 
   render() {
@@ -219,21 +214,23 @@ saveSnip = () => {
             </div>
             <AlertContainer ref={a => this.msg = a} {...this.alertOptions} />
             <div className="TabSelector">
-              <div
-                className={`Tab${this.state.selected === 'editor'
-                  ? ' Selected'
-                  : ''}`}
-                onClick={() => this.handleTabSelection('editor')}>editor</div>
-              <div
-                className={`Tab${this.state.selected === 'upload'
-                  ? ' Selected'
-                  : ''}`}
-                onClick={() => this.handleTabSelection('upload')}>upload</div>
-              <div
-                className={`Tab${this.state.selected === 'snippets'
-                  ? ' Selected'
-                  : ''}`}
-                onClick={() => this.handleTabSelection('snippets')}>snippets</div>
+              <div className="Tabs">
+                <div
+                  className={`Tab${this.state.selected === 'editor'
+                    ? ' Selected'
+                    : ''}`}
+                  onClick={() => this.handleTabSelection('editor')}>editor</div>
+                <div
+                  className={`Tab${this.state.selected === 'upload'
+                    ? ' Selected'
+                    : ''}`}
+                  onClick={() => this.handleTabSelection('upload')}>upload</div>
+                <div
+                  className={`Tab${this.state.selected === 'snippets'
+                    ? ' Selected'
+                    : ''}`}
+                  onClick={() => this.handleTabSelection('snippets')}>snippets</div>
+                </div>
               {this.renderSave()}
             </div>
             <div className="Form">
