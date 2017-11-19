@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
 
 import FacebookLogin from 'react-facebook-login';
 
@@ -9,11 +7,13 @@ import { LogoAnim } from './logo/logo-anim';
 import SocketIoClient from 'socket.io-client';
 import axios from 'axios';
 
+import About from './About';
+
 import Text from './Text';
+import DragDrop from './Dropzone';
 
 import './App.css';
 const _ = require('lodash');
-
 
 class App extends Component {
 
@@ -24,19 +24,8 @@ class App extends Component {
       outputText: '',
       inputText: '',
       aboutFlag: false,
-      name: '',
-    }
-  }
-
-  handleFileChange = files => {
-    try { var reader = new FileReader();
-    reader.onload = () => {
-      this.inputText.value = reader.result;
-      console.log(reader.result)
-    }
-    console.log(reader.readAsText(files[0]));
-  } catch (e) {
-    alert('Invalid file type, please upload a JavaScript file');
+      language: 1,
+      selected: 'editor',
     }
   }
 
@@ -47,8 +36,27 @@ class App extends Component {
     })
   }
 
+  async handleLanguageChange(val) {
+    await this.setState({language: val});
+    this.handleTextChange(this.state.inputText);
+  }
+
   handleTextChange = (value) => {
-    this.socket.emit('send', value);
+    this.setState({inputText: value})
+    this.socket.emit('send', value, this.state.language);
+  }
+  
+  handleTabSelection = (ref) => {
+    this.setState({selected: ref})
+  }
+
+  handleAboutClick = () => {
+    this.setState({aboutFlag:!this.state.aboutFlag})
+  }
+
+  handleFileLoad = (content) => {
+    this.setState({selected: 'editor'});
+    this.inputText = content;
   }
 
   //=============================================== REDERING
@@ -62,40 +70,19 @@ class App extends Component {
     );
   }
 
-  handleAboutClick = () => {
-    this.setState({aboutFlag:!this.state.aboutFlag})
-  }
-
-  renderTeam = () => {
-    let arr = [{name:'Charlie', url:'https://github.com/cboyce183'},{name:'Hannah', url:'https://github.com/redspanner'},{name:'Mike',url:'https://github.com/MPastorMeseguer'},{name:'Javier', url:'https://github.com/moranlemusj'},{name:'Jack',url:'https://github.com/vidocco'}]
-    arr = _.shuffle(arr);
-    return arr.map( el => {
-      return (
-        <a href={el.url} style={{textDecoration:'none'}}>
-          <div style={{padding:'5px',width:'60px',height:'60px',borderRadius:'35px', backgroundColor:'rgb(64,89,147)',display:'flex',justifyContent:'space-around',alignItems:'center'}}>
-            <p style={{fontFamily: 'Roboto', fontWeight: 'lighter', color: 'white'}}>{el.name}</p>
-          </div>
-        </a>
+  renderTabSelection = () => {
+    return this.state.selected === 'editor'
+      ? (
+        <Text
+          ref={this.inputText}
+          func={this.handleTextChange.bind(this)}
+          placeholder="INSERT CODE HERE"
+        />
+      ) : (
+        <DragDrop
+          func={this.handleFileLoad.bind(this)}
+        />
       )
-    })
-  }
-
-  renderAboutWindow = () => {
-    if (this.state.aboutFlag) return (
-      <div className="about-container" onClick={this.handleAboutClick}>
-        <h1 className="about-title">Made by developers, useful for everyone.</h1>
-        <img src={require('./assets/icons8-multicultural-people-100.png')} style={{height:'80px'}}/>
-        <h3 className="about-text">uncode.js is a tool for learning how to code JavaScript in the most humanly friendly way possible: code, but in your own, comfortable native language.</h3>
-        <div style={{display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', justifyContent: 'space-around'}}>
-          <p style={{fontFamily: 'Courier New, monospace;'}}>var foo = 10 + 5;</p>
-          <img src={require('./assets/icons8-right-100.png')} style={{height:'30px', padding: '20px'}}/>
-          <p>1 var variable foo is assigned to 10 + 5</p>
-        </div>
-        <h3 className="about-text">Simply start coding, or copy in some code from elsewhere, and read the steps the complier takes to run the code in terms anyone can understand. It is that simple!</h3>
-        <h3 className="about-text">The Team: </h3>
-        <div style={{display:'flex', flexFlow:'row nowrap',justifyContent:'space-around', paddingBottom:'5vh', width:'40%'}}>{this.renderTeam()}</div>
-      </div>
-    )
   }
 
   responseFacebook = (res) => {
@@ -119,7 +106,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {this.renderAboutWindow()}
+        <About
+          display={this.state.aboutFlag}
+          handleDisplay={this.handleAboutClick.bind(this)}/>
         <nav className="Header">
           <div className="MaxWidth">
             <LogoAnim />
@@ -134,11 +123,21 @@ class App extends Component {
                   callback={this.responseFacebook}
                 /> }
               <div className="about-button" onClick={this.handleAboutClick}>
-                <p className="about-button-text">about</p>
+                <p className="about-button-text">ABOUT</p>
               </div>
               <div className="spacer" style={{width:'2vw'}}></div>
-              <div className="about-button">
-                <p className="about-button-text">Eng</p>
+              <div className="lang-button"
+                style={{borderBottomLeftRadius: '2px', borderTopLeftRadius: '2px', borderRight: '1px solid #4664a7'}}
+                onClick={() => this.handleLanguageChange(1)}>
+                <p className="about-button-text">EN</p>
+              </div>
+              <div className="lang-button"
+                onClick={() => this.handleLanguageChange(2)}>
+                <p className="about-button-text">ES</p>
+              </div>
+              <div className="lang-button"
+                onClick={() => this.handleLanguageChange(3)}>
+                <p className="about-button-text">IT</p>
               </div>
             </div>
           </div>
@@ -146,20 +145,31 @@ class App extends Component {
         <div>
           <div className="MaxWidthMain">
             <div className="Explanation">
-              <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
+              <p style={{textAlign: 'center', width: '100%'}}>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
+            <div className="TabSelector">
+              <div
+                className={`Tab${this.state.selected === 'editor'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('editor')}>editor</div>
+              <div
+                className={`Tab${this.state.selected === 'upload'
+                  ? ' Selected'
+                  : ''}`}
+                onClick={() => this.handleTabSelection('upload')}>upload</div>
+            </div>
+<<<<<<< HEAD
             {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
               <ReactFileReader handleFiles={this.handleFileChange}
                               fileTypes={'.js'}>
                 <button className="">Upload</button>
               </ReactFileReader>
             </Dropzone> */}
+=======
+>>>>>>> css
             <div className="Form">
-              <Text
-                func={this.handleTextChange.bind(this)}
-                placeholder="INSERT CODE HERE"
-              />
-              <div className="Separator"></div>
+              {this.renderTabSelection()}
               <div className="Editor">
                 {this.renderLineNumbers()}
                 <textarea

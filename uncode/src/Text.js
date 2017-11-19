@@ -44,7 +44,7 @@ class Text extends Component {
       <div className="Editor">
         {this.renderLineNumbers()}
         <textarea
-          ref={el => this.text = el}
+          defaultValue={this.props.ref}
           onChange={() => this.props.func(this.text.value)}
           onKeyDown={(e) => this.convertKeys(e)}
           className="Text"
