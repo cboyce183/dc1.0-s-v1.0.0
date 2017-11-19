@@ -19,8 +19,8 @@ io.on('connection', function(socket) {
     console.log('An error has occured');
   });
 
-  socket.on('send', function(data) {
-    socket.emit('receive', algorithm(data))
+  socket.on('send', function(data, language) {
+    socket.emit('receive', algorithm(data, language))
   })
 });
 

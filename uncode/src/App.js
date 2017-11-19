@@ -11,6 +11,7 @@ import Text from './Text';
 import './App.css';
 const _ = require('lodash');
 
+//2 spanish, 3 italian
 
 class App extends Component {
 
@@ -21,6 +22,7 @@ class App extends Component {
       outputText: '',
       inputText: '',
       aboutFlag: false,
+      language: 1,
     }
   }
 
@@ -43,8 +45,14 @@ class App extends Component {
     })
   }
 
+  async handleLanguageChange(val) {
+    await this.setState({language: val});
+    this.handleTextChange(this.state.inputText);
+  }
+
   handleTextChange = (value) => {
-    this.socket.emit('send', value);
+    this.setState({inputText: value})
+    this.socket.emit('send', value, this.state.language);
   }
 
   //=============================================== REDERING
@@ -106,8 +114,18 @@ class App extends Component {
                 <p className="about-button-text">ABOUT</p>
               </div>
               <div className="spacer" style={{width:'2vw'}}></div>
-              <div className="about-button">
-                <p className="about-button-text">ENG</p>
+              <div className="lang-button"
+                style={{borderBottomLeftRadius: '2px', borderTopLeftRadius: '2px', borderRight: '1px solid #4664a7'}}
+                onClick={() => this.handleLanguageChange(1)}>
+                <p className="about-button-text">EN</p>
+              </div>
+              <div className="lang-button"
+                onClick={() => this.handleLanguageChange(2)}>
+                <p className="about-button-text">ES</p>
+              </div>
+              <div className="lang-button"
+                onClick={() => this.handleLanguageChange(3)}>
+                <p className="about-button-text">IT</p>
               </div>
             </div>
           </div>
