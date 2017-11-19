@@ -19,7 +19,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.socket = SocketIoClient('http://localhost:4200');
+    this.socket = SocketIoClient('http://192.168.0.101:4200');
     this.state = {
       outputText: '',
       inputText: '',

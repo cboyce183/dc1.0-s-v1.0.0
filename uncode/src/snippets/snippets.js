@@ -8,7 +8,7 @@ export class Snippets extends Component {
   constructor () {
     super();
     this.state = {
-      snips: [{_id:1, title:'boom'}],
+      snips: [],
     }
   }
 
