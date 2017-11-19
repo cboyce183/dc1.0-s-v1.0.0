@@ -112,32 +112,39 @@ class App extends Component {
         <nav className="Header">
           <div className="MaxWidth">
             <LogoAnim />
-            <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
-              {this.state.name ?
-                <div>Welcome {this.state.name} </div> :
+            <div className="button-wrapper" style={{display:'flex', width:'380px', flexFlow:'row nowrap', alignItems:'center', justifyContent:'space-around'}}>
+              {this.state.name ? (
+                <div>Welcome {this.state.name} </div>
+              ) : (
                 <FacebookLogin
+                  cssClass="Facebook"
                   appId="146642496064470"
                   autoLoad={true}
                   fields="name,email,picture"
                   onClick={this.sendToBack}
                   callback={this.responseFacebook}
-                /> }
+                />
+               )}
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">ABOUT</p>
               </div>
-              <div className="spacer" style={{width:'2vw'}}></div>
-              <div className="lang-button"
-                style={{borderBottomLeftRadius: '2px', borderTopLeftRadius: '2px', borderRight: '1px solid #4664a7'}}
-                onClick={() => this.handleLanguageChange(1)}>
-                <p className="about-button-text">EN</p>
-              </div>
-              <div className="lang-button"
-                onClick={() => this.handleLanguageChange(2)}>
-                <p className="about-button-text">ES</p>
-              </div>
-              <div className="lang-button"
-                onClick={() => this.handleLanguageChange(3)}>
-                <p className="about-button-text">IT</p>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexFlow: 'row nowrap',
+                width: '90px'
+              }}>
+                <div className="lang-button"
+                  style={{
+                    borderBottomLeftRadius: '2px',
+                    borderTopLeftRadius: '2px',
+                    borderRight: '1px solid #4664a7'
+                  }}
+                  onClick={() => this.handleLanguageChange(1)}>EN</div>
+                <div className="lang-button"
+                  onClick={() => this.handleLanguageChange(2)}>ES</div>
+                <div className="lang-button"
+                  onClick={() => this.handleLanguageChange(3)}>IT</div>
               </div>
             </div>
           </div>
