@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import ReactFileReader from 'react-file-reader';
 import Dropzone from 'react-dropzone';
 
+import FacebookLogin from 'react-facebook-login';
+
 import { LogoAnim } from './logo/logo-anim';
 
 import SocketIoClient from 'socket.io-client';
+import axios from 'axios';
 
 import Text from './Text';
 
@@ -21,6 +24,7 @@ class App extends Component {
       outputText: '',
       inputText: '',
       aboutFlag: false,
+      name: '',
     }
   }
 
@@ -94,6 +98,24 @@ class App extends Component {
     )
   }
 
+  responseFacebook = (res) => {
+    console.log(res);
+    if (res.name) {
+      this.setState({
+        name: res.name,
+        id: res.id
+        })
+      this.sendToBack(res);
+    }
+  }
+
+  sendToBack = (res) => {
+    console.log('send', res);
+    axios.post('http://192.168.0.101:4200/login', {
+      ...res,
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -102,6 +124,15 @@ class App extends Component {
           <div className="MaxWidth">
             <LogoAnim />
             <div className="button-wrapper" style={{display:'flex', flexFlow:'row nowrap', alignItems:'center'}}>
+              {this.state.name ?
+                <div>Welcome {this.state.name} </div> :
+                <FacebookLogin
+                  appId="146642496064470"
+                  autoLoad={true}
+                  fields="name,email,picture"
+                  onClick={this.sendToBack}
+                  callback={this.responseFacebook}
+                /> }
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">about</p>
               </div>
@@ -118,7 +149,7 @@ class App extends Component {
               <p>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
             {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-              <ReactFileReader handleFiles={this.handleFileChange} 
+              <ReactFileReader handleFiles={this.handleFileChange}
                               fileTypes={'.js'}>
                 <button className="">Upload</button>
               </ReactFileReader>
