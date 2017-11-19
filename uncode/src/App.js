@@ -74,7 +74,7 @@ class App extends Component {
     return this.state.selected === 'editor'
       ? (
         <Text
-          ref={this.inputText}
+          // ref={this.inputText}
           func={this.handleTextChange.bind(this)}
           placeholder="INSERT CODE HERE"
         />
