@@ -1,12 +1,18 @@
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+require('./config/database.config');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cors());
 
 const algorithm = require('./algorithm/controller')
-
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+const mainRoute = require('./routes/mainRoute');
 
 io.on('connection', function(socket) {
   console.log('A user connected!');
@@ -24,6 +30,7 @@ io.on('connection', function(socket) {
   })
 });
 
+app.use('/', mainRoute);
 
 http.listen(process.env.PORT || 4200, function(){
   console.log('listening on port:4200');
