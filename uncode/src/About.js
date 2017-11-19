@@ -15,9 +15,28 @@ class About extends Component {
     arr = _.shuffle(arr);
     return arr.map( el => {
       return (
-        <a href={el.url} style={{textDecoration:'none'}}>
-          <div style={{padding:'5px',width:'60px',height:'60px',borderRadius:'35px', backgroundColor:'rgb(64,89,147)',display:'flex',justifyContent:'space-around',alignItems:'center'}}>
-            <p style={{fontFamily: 'Roboto', fontWeight: '300', color: 'white', textAlign: 'center'}}>{el.name}</p>
+        <a
+          href={el.url}
+          style={{textDecoration:'none'}}
+          target="_blank">
+          <div
+            style={{
+              padding:'5px',
+              width:'60px',
+              height:'60px',
+              borderRadius:'35px',
+              backgroundColor:'rgb(64,89,147)',
+              display:'flex',
+              justifyContent:'space-around',
+              alignItems:'center'
+            }}>
+            <p
+              style={{
+                fontFamily: 'Roboto',
+                fontWeight: '300',
+                color: 'white',
+                textAlign: 'center'
+              }}>{el.name}</p>
           </div>
         </a>
       )
