@@ -61,6 +61,45 @@ class App extends Component {
     this.setState({selected: 'editor'});
   }
 
+  saveSnip = () => {
+    if (!this.state.inputText) {
+      alert(`Can't save empty code! Please write something`);
+    } else if (!this.refs.name.value) {
+      alert(`Can't save a snippet with no title! Please enter one!`);
+    } else {
+    axios.post('http://192.168.0.101:4200/snippet/save', {
+    code: this.state.inputText,
+    userId: this.state.id,
+    title: this.refs.name.value
+    }).then(res => {
+      console.log(res);
+      if (res.status === 203) {
+        alert('Snippet title is taken, please pick another one!');
+      } else {
+        this.refs.name.value = ''
+      }
+      })
+    }
+  }
+
+  responseFacebook = (res) => {
+    console.log(res);
+    if (res.name) {
+      this.setState({
+        name: res.name,
+        id: res.id
+        })
+      this.sendToBack(res);
+    }
+  }
+
+  sendToBack = (res) => {
+    console.log('send', res);
+    axios.post('http://192.168.0.101:4200/login', {
+      ...res,
+    })
+  }
+
   //=============================================== REDERING
 
   renderLineNumbers () {
@@ -92,44 +131,6 @@ class App extends Component {
     }
   }
 
-  responseFacebook = (res) => {
-    console.log(res);
-    if (res.name) {
-      this.setState({
-        name: res.name,
-        id: res.id
-        })
-      this.sendToBack(res);
-    }
-  }
-
-  sendToBack = (res) => {
-    console.log('send', res);
-    axios.post('http://192.168.0.101:4200/login', {
-      ...res,
-    })
-  }
-  saveSnip = () => {
-      if (!this.state.inputText) {
-        alert(`Can't save empty code! Please write something`);
-      } else if (!this.refs.name.value) {
-        alert(`Can't save a snippet with no title! Please enter one!`);
-      } else {
-      axios.post('http://192.168.0.101:4200/snippet/save', {
-      code: this.state.inputText,
-      userId: this.state.id,
-      title: this.refs.name.value
-    }).then(res => {
-      console.log(res);
-      if (res.status === 203) {
-        alert('Snippet title is taken, please pick another one!');
-      } else {
-        this.refs.name.value = ''
-      }
-      })
-    }
-  }
-
   renderSave = () => {
     return this.state.id ?
     <div className = "bSave">
@@ -145,6 +146,7 @@ class App extends Component {
       </button>
     </div> : <div></div>
   }
+
   render() {
     return (
       <div className="App">
@@ -218,6 +220,7 @@ class App extends Component {
                   ? ' Selected'
                   : ''}`}
                 onClick={() => this.handleTabSelection('snippets')}>snippets</div>
+              {this.renderSave()}
             </div>
             <div className="Form">
               {this.renderTabSelection()}
