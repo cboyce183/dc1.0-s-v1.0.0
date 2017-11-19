@@ -6,6 +6,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  facebookId: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true
@@ -15,6 +19,7 @@ const userSchema = new Schema({
   },
   snippets: {
     type: [Schema.Types.ObjectId],
+    ref: 'Snippet',
     default: []
   }
 });
