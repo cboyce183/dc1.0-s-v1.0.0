@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
 
-const algorithm = require('./algorithm/controller')
-const mainRoute = require('./routes/mainRoute');
+const algorithm = require('./uc-algorithm/controller')
+const mainRoute = require('./routes/main-route');
 
 io.on('connection', function(socket) {
   console.log('A user connected!');
@@ -33,5 +33,5 @@ io.on('connection', function(socket) {
 app.use('/', mainRoute);
 
 http.listen(process.env.PORT || 4200, function(){
-  console.log('listening on port:4200');
+  console.log('listening on port:' + (process.env.PORT || 4200));
 });

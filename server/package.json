@@ -15,6 +15,7 @@
     "dotenv": "^4.0.0",
     "esprima": "^4.0.0",
     "express": "^4.16.2",
+    "indent-string": "^3.2.0",
     "mongoose": "^4.13.4",
     "socket.io": "^2.0.4"
   }
