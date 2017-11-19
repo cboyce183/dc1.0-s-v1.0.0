@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import ReactFileReader from 'react-file-reader';
-import Dropzone from 'react-dropzone';
 
 import { LogoAnim } from './logo/logo-anim';
 
 import SocketIoClient from 'socket.io-client';
 
-import Text from './Text';
 import About from './About';
+
+import Text from './Text';
+import DragDrop from './Dropzone';
 
 import './App.css';
 const _ = require('lodash');
@@ -23,18 +23,6 @@ class App extends Component {
       aboutFlag: false,
       language: 1,
       selected: 'editor',
-    }
-  }
-
-  handleFileChange = files => {
-    try { var reader = new FileReader();
-    reader.onload = () => {
-      this.inputText.value = reader.result;
-      console.log(reader.result)
-    }
-    console.log(reader.readAsText(files[0]));
-  } catch (e) {
-    alert('Invalid file type, please upload a JavaScript file');
     }
   }
 
@@ -63,6 +51,11 @@ class App extends Component {
     this.setState({aboutFlag:!this.state.aboutFlag})
   }
 
+  handleFileLoad = (content) => {
+    this.setState({selected: 'editor'});
+    this.inputText = content;
+  }
+
   //=============================================== REDERING
 
   renderLineNumbers () {
@@ -78,11 +71,14 @@ class App extends Component {
     return this.state.selected === 'editor'
       ? (
         <Text
+          ref={this.inputText}
           func={this.handleTextChange.bind(this)}
           placeholder="INSERT CODE HERE"
         />
       ) : (
-        ''
+        <DragDrop
+          func={this.handleFileLoad.bind(this)}
+        />
       )
   }
 
@@ -121,12 +117,6 @@ class App extends Component {
             <div className="Explanation">
               <p style={{textAlign: 'center', width: '100%'}}>Welcome to uncode! The first platform that simplifies and translates convoluted JavaScript into plain human language.</p>
             </div>
-            {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-              <ReactFileReader handleFiles={this.handleFileChange} 
-                              fileTypes={'.js'}>
-                <button className="">Upload</button>
-              </ReactFileReader>
-            </Dropzone> */}
             <div className="TabSelector">
               <div
                 className={`Tab${this.state.selected === 'editor'
