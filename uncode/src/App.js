@@ -45,7 +45,7 @@ class App extends Component {
     this.setState({inputText: value})
     this.socket.emit('send', value, this.state.language);
   }
-  
+
   handleTabSelection = (ref) => {
     this.setState({selected: ref})
   }
@@ -159,15 +159,6 @@ class App extends Component {
                   : ''}`}
                 onClick={() => this.handleTabSelection('upload')}>upload</div>
             </div>
-<<<<<<< HEAD
-            {/* <Dropzone className="DropZone" onDrop={this.handleFileChange} accept='.js'>
-              <ReactFileReader handleFiles={this.handleFileChange}
-                              fileTypes={'.js'}>
-                <button className="">Upload</button>
-              </ReactFileReader>
-            </Dropzone> */}
-=======
->>>>>>> css
             <div className="Form">
               {this.renderTabSelection()}
               <div className="Editor">
