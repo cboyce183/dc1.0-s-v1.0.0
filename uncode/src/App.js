@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
 
 import { LogoAnim } from './logo/logo-anim';
+import { Snippets } from './snippets/snippets';
 
 import SocketIoClient from 'socket.io-client';
 import axios from 'axios';
@@ -78,7 +79,7 @@ class App extends Component {
         <Text
           val={this.inputText}
           func={this.handleTextChange.bind(this)}
-          placeholder="INSERT CODE HERE"
+          placeholder={"Insert code here"}
         />
       )
     } else if (this.state.selected === 'upload') {
@@ -88,7 +89,7 @@ class App extends Component {
         />
       )
     } else {
-      return (<div>YOU'RE IN SNIPPETS NOW SON</div>)
+      return (<Snippets id={this.state.id}/>)
     }
   }
 
@@ -116,10 +117,10 @@ class App extends Component {
         alert(`Can't save a snippet with no title! Please enter one!`);
       } else {
       axios.post('http://192.168.0.101:4200/snippet/save', {
-      code: this.state.inputText,
-      userId: this.state.id,
-      title: this.refs.name.value
-    }).then(res => {
+        code: this.state.inputText,
+        userId: this.state.id,
+        title: this.refs.name.value
+      }).then(res => {
       console.log(res);
       if (res.status === 203) {
         alert('Snippet title is taken, please pick another one!');
@@ -166,7 +167,7 @@ class App extends Component {
                   onClick={this.sendToBack}
                   callback={this.responseFacebook}
                 />
-               )}
+              )}
               <div className="about-button" onClick={this.handleAboutClick}>
                 <p className="about-button-text">ABOUT</p>
               </div>
@@ -198,7 +199,7 @@ class App extends Component {
                 textAlign: 'center',
                 width: '100%'
               }}>
-                Welcome to uncode! The first platform that simplifies and translates 
+                Welcome to uncode! The first platform that simplifies and translates
                 convoluted JavaScript into plain human language.
               </p>
             </div>
