@@ -1,1 +1,1 @@
-Never read the readme. never.
+Personal development repo only. See other Repo for full details.
